@@ -1,9 +1,11 @@
 package net.lightbody.able.core.middleware;
 
 import com.google.common.collect.Lists;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.google.inject.Singleton;
-import net.lightbody.able.core.Request;
-import net.lightbody.able.core.Response;
+import net.lightbody.able.core.config.JsonProperties;
+import net.lightbody.able.core.util.Log;
 
 import java.util.List;
 
@@ -18,13 +20,24 @@ import java.util.List;
 public class MiddlewareManager {
 
     private List<Class> handlers = Lists.newArrayList();
+    private static Log LOG = new Log();
 
+    @Inject
+    private Injector injector;
 
+    @Inject
+    JsonProperties props;
+
+    @Inject
+    public MiddlewareManager() {
+     // this should load middleware from the config file
+    }
+    
     public List<Middleware> getMiddlewareList() {
         List<Middleware> r = Lists.newArrayList();
-        for (Class z: handlers) {
+        for (Class z : handlers) {
             try {
-                r.add( (Middleware) z.newInstance());
+                r.add( (Middleware) injector.getInstance(z));
             } catch (Exception e) {
                 new RuntimeException(e);
             }

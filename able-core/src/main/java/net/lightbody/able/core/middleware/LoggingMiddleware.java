@@ -16,12 +16,13 @@ public class LoggingMiddleware extends Middleware {
 
     @Override
     public void process(Request req) {
+        LOG.info("Request:");
         LOG.info(req.toString());
     }
 
     @Override
     public void process(Response resp) {
-        LOG.info("done processing request!");
+        LOG.info("Response:");
         LOG.info(resp.toString());
     }
 }

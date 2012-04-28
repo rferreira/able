@@ -2,8 +2,9 @@ package net.lightbody.able.example;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import net.lightbody.able.core.HttpServer;
 import net.lightbody.able.core.config.ConfigurationModule;
-import net.lightbody.able.core.internal.NettyHttpServer;
+import net.lightbody.able.core.routing.Router;
 import net.lightbody.able.core.util.Log;
 
 public class Main {
@@ -13,7 +14,9 @@ public class Main {
         LOG.info("Starting Able...");
 
         Injector injector = Guice.createInjector(new ConfigurationModule("example"));
-        net.lightbody.able.core.HttpServer server = injector.getInstance(NettyHttpServer.class);
+        HttpServer server = injector.getInstance(HttpServer.class);
+        Router router = injector.getInstance(Router.class);
+        router.route("^/hello-world/", Homepage.class);
         server.start();
     }
 }

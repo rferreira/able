@@ -9,6 +9,6 @@ package net.lightbody.able.core;
  */
 public interface View {
 
-    public void dispatch(Request req, Response res);
+    public Response dispatch(Request req);
 
 }

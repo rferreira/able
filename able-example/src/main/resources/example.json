@@ -1,6 +1,5 @@
 {
     "port" : 8080,
-    "foo" : "bar",
     "config" : {
         "refresh" : 5
     },
@@ -24,15 +23,9 @@
         "mongo" : {
             "uri" : "mongodb://localhost/able_example"
         }
-    }/*,
-    "log" : {
-        "loggly" : {
-            "url" : "https://logs.loggly.com/inputs/xxxxxxx",
-            "level" : "FINE",
-            "global" : {
-                "foo" : "bar"
-            }
-        }
-    }
-    */
+    },
+    "middleware" : [
+        "net.lightbody.able.core.middleware.LoggingMiddleware",
+        "net.lightbody.able.core.middleware.XRuntimeMiddleware"
+    ]
 }

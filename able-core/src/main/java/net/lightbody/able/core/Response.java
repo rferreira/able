@@ -1,10 +1,11 @@
 package net.lightbody.able.core;
 
 import com.google.common.collect.Maps;
-import com.google.common.io.ByteStreams;
-import com.google.common.io.OutputSupplier;
+import com.google.common.net.HttpHeaders;
+import net.lightbody.able.core.util.Log;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -15,33 +16,49 @@ import java.util.Map;
  * To change this template use File | Settings | File Templates.
  */
 public class Response {
+    private static Log LOG = new Log();
 
-    public int code = 200;
-    private OutputStream os;
-    public final Map<String, String> HEADERS = Maps.newConcurrentMap();
+    private ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+    private final String DEFAULT_CONTENT_TYPE = "text/html";
 
-    public Response(OutputStream os) {
-        this.os = os;
+    public int status = 200;
+    public final Map<String, String> HEADERS = Maps.newHashMap();
+
+
+    public void setCookie(String key, String value) {
+
     }
 
-    public void setContent(byte[] content) throws IOException {
-        os.write(content,0,content.length);
+    public Response(String content, int status, String contentType) {
+        try {
+            buffer.write(content.getBytes());
+        } catch (IOException e) {
+            LOG.warn("oops", e);
+        }
+
+        this.status = status;
+        HEADERS.put(HttpHeaders.CONTENT_TYPE, contentType);
 
     }
 
-    public OutputStream getOutputStream() {
-        return os;
+    public Response() {
+        status = 200;
+        HEADERS.put(HttpHeaders.CONTENT_TYPE, DEFAULT_CONTENT_TYPE);
     }
 
-    public void flush() {
+    public ByteArrayOutputStream flush() throws IOException {
+        LOG.info("flushing buffer");
+        buffer.flush();
 
+        HEADERS.put(HttpHeaders.CONTENT_LENGTH, String.valueOf(buffer.size()));
+
+        return buffer;
     }
 
     @Override
     public String toString() {
         return "Response{" +
-                "code=" + code +
-                ", os=" + os +
+                ", status=" + status +
                 ", HEADERS=" + HEADERS +
                 '}';
     }

@@ -1,5 +1,6 @@
 package net.lightbody.able.core.middleware;
 
+import com.google.inject.Singleton;
 import net.lightbody.able.core.Request;
 import net.lightbody.able.core.Response;
 

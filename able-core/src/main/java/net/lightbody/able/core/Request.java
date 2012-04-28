@@ -3,8 +3,8 @@ package net.lightbody.able.core;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
 import com.google.common.io.ByteStreams;
-import com.google.common.net.HttpHeaders;
-import com.sun.xml.internal.bind.v2.runtime.output.Encoded;
+import net.lightbody.able.core.http.HttpMethod;
+import net.lightbody.able.core.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,9 +20,11 @@ import java.util.Map;
 public class Request {
 
     private InputStream is;
-    private String method = "GET";
-    private String httpVersion = "1.1";
+    private HttpMethod method = null;
+    private String version = "1.1";
     private String path;
+
+    private static Log LOG = new Log();
 
     public final Map<String, String> GET = Maps.newConcurrentMap();
     public final Map<String, String> POST = Maps.newConcurrentMap();
@@ -31,18 +33,14 @@ public class Request {
     public final Map<String,String> SESSION = Maps.newConcurrentMap();
     public final Map<String, String> COOKIES = Maps.newConcurrentMap();
 
-    public String getHttpVersion() {
-        return httpVersion;
+    public String getVersion() {
+        return version;
     }
 
-    public Request(String method, String path, Map<String,String> headers, InputStream is) {
+    public Request(HttpMethod method, String path, InputStream content) {
         this.method = method;
         this.path = path;
         this.is = is;
-
-        /* Processing headers */
-
-        HEADERS.putAll(headers);
 
     }
 
@@ -56,7 +54,7 @@ public class Request {
 
     }
 
-    public String getMethod() {
+    public HttpMethod getMethod() {
         return method;
     }
 
@@ -67,30 +65,15 @@ public class Request {
     public Request() {
     }
 
-    public static void main(String[] args) {
-        Request r = new Request();
-
-        if (r.getMethod().equals("GET")) {
-            System.out.println("hello world");
-        }
-
-        if (r.getHttpVersion().equals("1.1")) {
-            System.out.println("bar");
-        }
-
-        String username = r.COOKIES.get("cart");
-        String password = r.GET.get("password");
-
-        r.SESSION.put("hello" ,"world");
-
-    }
+    public boolean isSecure() { return false; }
+    public boolean isAjax() { return false; }
 
     @Override
     public String toString() {
         return "Request{" +
                 "is=" + is +
                 ", method='" + method + '\'' +
-                ", httpVersion='" + httpVersion + '\'' +
+                ", version='" + version + '\'' +
                 ", path='" + path + '\'' +
                 ", GET=" + GET +
                 ", POST=" + POST +
