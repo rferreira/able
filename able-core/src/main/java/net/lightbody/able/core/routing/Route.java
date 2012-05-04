@@ -9,9 +9,17 @@ import jregex.Pattern;
 public class Route {
     private Pattern pattern;
     private Class clazz;
+    private String regex;
 
-    public Route(Pattern pattern, Class clazz) {
-        this.pattern = pattern;
+
+    public String getRegex() {
+        return regex;
+    }
+
+
+    public Route(String regex, Class clazz) {
+        this.pattern = new Pattern(regex);
+        this.regex = regex;
         this.clazz = clazz;
     }
 

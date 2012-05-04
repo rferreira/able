@@ -3,7 +3,9 @@ package net.lightbody.able.core;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
 import com.google.common.io.ByteStreams;
+import com.google.common.net.HttpHeaders;
 import net.lightbody.able.core.http.HttpMethod;
+import net.lightbody.able.core.http.XHeaders;
 import net.lightbody.able.core.util.Log;
 
 import java.io.IOException;
@@ -19,7 +21,7 @@ import java.util.Map;
  */
 public class Request {
 
-    private InputStream is;
+    private InputStream body;
     private HttpMethod method = null;
     private String version = "1.1";
     private String path;
@@ -37,20 +39,20 @@ public class Request {
         return version;
     }
 
-    public Request(HttpMethod method, String path, InputStream content) {
+    public Request(HttpMethod method, String path, InputStream body) {
         this.method = method;
         this.path = path;
-        this.is = is;
+        this.body = body;
 
     }
 
     public InputStream getInputStream() {
-        Preconditions.checkNotNull(is);
-        return is;
+        Preconditions.checkNotNull(body);
+        return body;
     }
 
     public String getBody() throws IOException {
-        return new String(ByteStreams.toByteArray(is));
+        return new String(ByteStreams.toByteArray(body));
 
     }
 
@@ -66,12 +68,18 @@ public class Request {
     }
 
     public boolean isSecure() { return false; }
-    public boolean isAjax() { return false; }
 
+    public boolean isAjax() {
+        return HEADERS.get(XHeaders.HTTP_X_REQUESTED_WITH) != null && HEADERS.get(XHeaders.HTTP_X_REQUESTED_WITH).equalsIgnoreCase("XMLHttpRequest");
+    }
+
+    public boolean isKeepAlive() {
+        return HEADERS.get(HttpHeaders.CONNECTION) != null && HEADERS.get(HttpHeaders.CONNECTION).equalsIgnoreCase("Keep-Alive");
+    }
+        
     @Override
     public String toString() {
         return "Request{" +
-                "is=" + is +
                 ", method='" + method + '\'' +
                 ", version='" + version + '\'' +
                 ", path='" + path + '\'' +

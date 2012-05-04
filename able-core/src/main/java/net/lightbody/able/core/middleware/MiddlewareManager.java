@@ -8,6 +8,7 @@ import net.lightbody.able.core.config.JsonProperties;
 import net.lightbody.able.core.util.Log;
 
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,7 +20,7 @@ import java.util.List;
 @Singleton
 public class MiddlewareManager {
 
-    private List<Class> handlers = Lists.newArrayList();
+    private List<Class> handlers = new CopyOnWriteArrayList<Class>();
     private static Log LOG = new Log();
 
     @Inject
@@ -30,14 +31,18 @@ public class MiddlewareManager {
 
     @Inject
     public MiddlewareManager() {
-     // this should load middleware from the config file
+        // this should load middleware from the config file
+        //TODO: clean this hack
+        add(0, XRuntimeMiddleware.class);
+        add(1, LoggingMiddleware.class);
+
     }
-    
+
     public List<Middleware> getMiddlewareList() {
         List<Middleware> r = Lists.newArrayList();
         for (Class z : handlers) {
             try {
-                r.add( (Middleware) injector.getInstance(z));
+                r.add((Middleware) injector.getInstance(z));
             } catch (Exception e) {
                 new RuntimeException(e);
             }

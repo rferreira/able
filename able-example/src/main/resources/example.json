@@ -1,5 +1,8 @@
 {
     "port" : 8080,
+    "static_root" : "/Users/rafael/dev/scanii/static/",
+    "static_url" : "/static/",
+    "debug"  : true,
     "config" : {
         "refresh" : 5
     },
@@ -24,8 +27,8 @@
             "uri" : "mongodb://localhost/able_example"
         }
     },
-    "middleware" : [
-        "net.lightbody.able.core.middleware.LoggingMiddleware",
+    "middleware" : [        
         "net.lightbody.able.core.middleware.XRuntimeMiddleware"
     ]
 }
+

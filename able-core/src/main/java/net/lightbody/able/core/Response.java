@@ -26,10 +26,10 @@ public class Response {
 
 
     public void setCookie(String key, String value) {
-
+        throw new IllegalStateException("not implemented!");
     }
 
-    public Response(String content, int status, String contentType) {
+    public Response(int status, String content,  String contentType) {
         try {
             buffer.write(content.getBytes());
         } catch (IOException e) {
@@ -47,7 +47,6 @@ public class Response {
     }
 
     public ByteArrayOutputStream flush() throws IOException {
-        LOG.info("flushing buffer");
         buffer.flush();
 
         HEADERS.put(HttpHeaders.CONTENT_LENGTH, String.valueOf(buffer.size()));

@@ -5,9 +5,9 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Singleton;
 import jregex.Matcher;
-import jregex.Pattern;
 import net.lightbody.able.core.Request;
 import net.lightbody.able.core.Response;
+import net.lightbody.able.core.ResponseNotFound;
 import net.lightbody.able.core.View;
 import net.lightbody.able.core.middleware.Middleware;
 import net.lightbody.able.core.middleware.MiddlewareManager;
@@ -16,6 +16,8 @@ import net.lightbody.able.core.util.Log;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 
 /**
@@ -25,19 +27,16 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @Singleton
 public class Router {
 
-    CopyOnWriteArrayList<Route> routes = new CopyOnWriteArrayList<Route>();
+    private CopyOnWriteArrayList<Route> routes = new CopyOnWriteArrayList<Route>();    
 
-    @Inject
-    Injector injector;
-    @Inject
-    MiddlewareManager mm;
-
+    @Inject Injector injector;
+    @Inject MiddlewareManager mm;
 
     private static Log LOG = new Log();
 
     public void route(String regex, Class clazz) {
         routes.add(
-                new Route(new Pattern(regex), clazz)
+                new Route(regex,clazz)
         );
     }
 
@@ -65,14 +64,14 @@ public class Router {
             m.process(req);
         }
 
-        LOG.info("routing: " + req.getPath());
+        LOG.fine("routing: " + req.getPath());
 
         View view = resolve(req);
 
 
         if (view == null) {
             LOG.info("could not find a proper view to render this request");
-            res = new Response("Page not found\n", 404, "text/html");
+            res = new ResponseNotFound();
         } else {
             res = view.dispatch(req);
         }
@@ -84,5 +83,21 @@ public class Router {
 
         return res;
 
+    }
+
+    /**
+     * returns the reverse of an route - prob could use some speed up.
+     * @param clazz
+     * @return
+     */
+    public String reverse(Class clazz) {
+        for (Route r: routes) {
+            if (r.getClazz().equals(clazz)) {
+                return r.getRegex();
+            }
+
+        }
+
+        return null;
     }
 }

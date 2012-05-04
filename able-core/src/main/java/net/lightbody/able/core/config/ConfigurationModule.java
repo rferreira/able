@@ -98,7 +98,8 @@ public class ConfigurationModule extends AbstractModule {
         JsonProperties props = new JsonProperties();
 
         // Load the core app properties first (src/main/resources/<name>.json)
-        URL url = Configuration.class.getResource("/" + name + ".json");
+        
+        URL url = getClass().getResource("/" + name + ".json");
         if (null == url) {
             throw new FileNotFoundException("The core configuration file \"" + name + ".json\" could not be found.");
         }
