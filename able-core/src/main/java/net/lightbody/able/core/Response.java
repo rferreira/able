@@ -29,13 +29,23 @@ public class Response {
         throw new IllegalStateException("not implemented!");
     }
 
-    public Response(int status, String content,  String contentType) {
+    public void setContent(byte[] content) {
         try {
-            buffer.write(content.getBytes());
+            buffer.write(content);
         } catch (IOException e) {
             LOG.warn("oops", e);
         }
+    }
 
+    public Response(int status, String content, String contentType) {
+        setContent(content.getBytes());
+        this.status = status;
+        HEADERS.put(HttpHeaders.CONTENT_TYPE, contentType);
+    }
+
+
+    public Response(int status, byte[] content, String contentType) {
+        setContent(content);
         this.status = status;
         HEADERS.put(HttpHeaders.CONTENT_TYPE, contentType);
 

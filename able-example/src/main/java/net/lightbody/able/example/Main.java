@@ -4,6 +4,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import net.lightbody.able.core.HttpServer;
 import net.lightbody.able.core.config.ConfigurationModule;
+import net.lightbody.able.core.middleware.LoggingMiddleware;
 import net.lightbody.able.core.middleware.XRuntimeMiddleware;
 import net.lightbody.able.core.routing.Router;
 import net.lightbody.able.core.util.Log;
@@ -21,6 +22,7 @@ public class Main {
 
         // wiring middleware
         router.middlewares.add(XRuntimeMiddleware.class);
+        router.middlewares.add(LoggingMiddleware.class);
 
         // sample route definition
         router.route("^/hello-world/", Homepage.class);
