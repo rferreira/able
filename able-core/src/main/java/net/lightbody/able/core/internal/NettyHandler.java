@@ -5,7 +5,7 @@ import com.google.inject.Inject;
 import net.lightbody.able.core.Request;
 import net.lightbody.able.core.Response;
 import net.lightbody.able.core.ResponseNotFound;
-import net.lightbody.able.core.middleware.MiddlewareManager;
+import net.lightbody.able.core.http.XHeaders;
 import net.lightbody.able.core.routing.Router;
 import net.lightbody.able.core.util.Log;
 import org.jboss.netty.buffer.ChannelBufferInputStream;
@@ -23,9 +23,6 @@ public class NettyHandler extends SimpleChannelHandler {
 
     @Inject
     Router router;
-
-    @Inject
-    MiddlewareManager mm;
 
     @Override
     public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
@@ -101,9 +98,12 @@ public class NettyHandler extends SimpleChannelHandler {
             internalResponse.setHeader(entry.getKey(), entry.getValue());
         }
 
-        ChannelFuture future = e.getChannel().write(internalResponse);
-        if (!req.isKeepAlive()) {
-            future.addListener(ChannelFutureListener.CLOSE);
+        // should we write the response or not?
+        if (!internalResponse.containsHeader(XHeaders.X_SENDFILE)) {
+            ChannelFuture future = e.getChannel().write(internalResponse);
+            if (!req.isKeepAlive()) {
+                future.addListener(ChannelFutureListener.CLOSE);
+            }            
         }
 
         ctx.sendUpstream(e);

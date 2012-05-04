@@ -6,6 +6,7 @@ import net.lightbody.able.core.Request;
 import net.lightbody.able.core.Response;
 import net.lightbody.able.core.ResponseNotFound;
 import net.lightbody.able.core.View;
+import net.lightbody.able.core.http.HttpMethod;
 import net.lightbody.able.core.http.XHeaders;
 import net.lightbody.able.core.util.Log;
 
@@ -21,13 +22,13 @@ public class ServeStatic implements View {
     private String STATIC_ROOT = null;
     private String STATIC_URL = null;
 
+
     @Inject
     public ServeStatic(@Named("static_root") String location, @Named("static_url") String url ) {
         if (location.length() == 0) {
             return;
         }
 
-        LOG.info("serving static files from %s ", location);
         STATIC_ROOT = location;
         STATIC_URL = url;
 
@@ -36,8 +37,11 @@ public class ServeStatic implements View {
     @Override
     public Response dispatch(Request req) {
 
-        String path = req.getPath().replace(STATIC_URL, "").replace('/', File.separatorChar);
+        if (req.getMethod() != HttpMethod.GET) {
+            return new Response(405, "method not allowed", "text/html");
+        }
 
+        String path = req.getPath().replace(STATIC_URL, "").replace('/', File.separatorChar);
 
         try {
             File fd = new File(STATIC_ROOT, path);

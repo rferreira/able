@@ -106,8 +106,8 @@ public class XSendFileHandler extends SimpleChannelHandler {
 
 
         if (!request.containsHeader(XHeaders.X_SENDFILE)) {
-            LOG.info("nothing to do here, ignoring");
-            ctx.sendUpstream(e);
+            // nothing to do - ignoring
+            return;
         }
 
         if (request.getMethod() != GET) {
@@ -237,7 +237,11 @@ public class XSendFileHandler extends SimpleChannelHandler {
                 CharsetUtil.UTF_8));
 
         // Close the connection as soon as the error message is sent.
-        ctx.getChannel().write(response).addListener(ChannelFutureListener.CLOSE);
+        try {
+            ctx.getChannel().write(response).addListener(ChannelFutureListener.CLOSE);
+        } catch (Exception e) {
+            LOG.fine("oops", e);
+        }
     }
 
     /**
