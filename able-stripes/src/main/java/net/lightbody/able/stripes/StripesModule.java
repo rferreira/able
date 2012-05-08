@@ -1,7 +1,7 @@
 package net.lightbody.able.stripes;
 
 import com.google.inject.servlet.ServletModule;
-import net.lightbody.able.core.util.Able;
+import net.lightbody.able.core.Able;
 import net.sourceforge.stripes.action.ActionBean;
 import net.sourceforge.stripes.util.ResolverUtil;
 

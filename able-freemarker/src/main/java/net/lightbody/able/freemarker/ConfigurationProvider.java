@@ -3,7 +3,7 @@ package net.lightbody.able.freemarker;
 import com.google.inject.Provider;
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
-import net.lightbody.able.core.util.Able;
+import net.lightbody.able.core.Able;
 
 import java.io.File;
 import java.io.FilenameFilter;

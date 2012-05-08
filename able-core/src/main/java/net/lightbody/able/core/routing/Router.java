@@ -25,8 +25,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @Singleton
 public class Router {
 
-    private CopyOnWriteArrayList<Route> routes = new CopyOnWriteArrayList<Route>();
-    public CopyOnWriteArrayList<Class> middlewares = new CopyOnWriteArrayList<Class>();
+    private List<Route> routes = new CopyOnWriteArrayList<Route>();
+    public List<Class> middlewares = new CopyOnWriteArrayList<Class>();
 
     @Inject
     Injector injector;

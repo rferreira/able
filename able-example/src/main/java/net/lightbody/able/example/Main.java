@@ -7,6 +7,7 @@ import net.lightbody.able.core.config.ConfigurationModule;
 import net.lightbody.able.core.middleware.LoggingMiddleware;
 import net.lightbody.able.core.middleware.XRuntimeMiddleware;
 import net.lightbody.able.core.routing.Router;
+import net.lightbody.able.core.Able;
 import net.lightbody.able.core.util.Log;
 import net.lightbody.able.core.views.ServeStatic;
 
@@ -17,19 +18,23 @@ public class Main {
         LOG.info("Starting Able...");
 
         Injector injector = Guice.createInjector(new ConfigurationModule("example"));
-        HttpServer server = injector.getInstance(HttpServer.class);
-        Router router = injector.getInstance(Router.class);
+
+        Able able = injector.getInstance(Able.class);
 
         // wiring middleware
-        router.middlewares.add(XRuntimeMiddleware.class);
-        router.middlewares.add(LoggingMiddleware.class);
+        able.router.middlewares.add(XRuntimeMiddleware.class);
+        able.router.middlewares.add(LoggingMiddleware.class);
 
         // sample route definition
-        router.route("^/hello-world/", Homepage.class);
+        able.router.route("^/$", Homepage.class);
 
         // handle all static assets:
-        router.route("^/static/(.*)$", ServeStatic.class);
+        able.router.route("^/static/(.*)$", ServeStatic.class);
 
-        server.start();
+        //example with args
+        able.router.route("^/account/{id}/$", Accounts.class);
+
+        // starting server
+        able.server.start();
     }
 }

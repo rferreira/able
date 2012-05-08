@@ -1,5 +1,6 @@
 package net.lightbody.able.core;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
 import com.google.common.net.HttpHeaders;
 import net.lightbody.able.core.util.Log;
@@ -19,13 +20,14 @@ public class Response {
     private static Log LOG = new Log();
 
     private ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-    private final String DEFAULT_CONTENT_TYPE = "text/html";
 
     public int status = 200;
     public final Map<String, String> HEADERS = Maps.newHashMap();
 
 
     public void setCookie(String key, String value) {
+        Preconditions.checkNotNull(value);
+        Preconditions.checkNotNull(key);
         throw new IllegalStateException("not implemented!");
     }
 
@@ -53,7 +55,7 @@ public class Response {
 
     public Response() {
         status = 200;
-        HEADERS.put(HttpHeaders.CONTENT_TYPE, DEFAULT_CONTENT_TYPE);
+        HEADERS.put(HttpHeaders.CONTENT_TYPE, "text/html");
     }
 
     public ByteArrayOutputStream flush() throws IOException {

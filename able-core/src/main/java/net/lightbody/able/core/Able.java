@@ -1,11 +1,33 @@
-package net.lightbody.able.core.util;
+package net.lightbody.able.core;
+
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+import net.lightbody.able.core.routing.Router;
+import net.lightbody.able.core.util.Log;
 
 import java.io.File;
 import java.net.URL;
 
+@Singleton
 public class Able {
     private static Class anchorClass;
-    
+
+    public static final String version = "0.1 alpha";
+
+    public Router router;
+    public HttpServer server;
+
+    private static Log LOG = new Log();
+
+    @Inject
+    public Able(Router router, HttpServer server) {
+
+        LOG.info("able framework (v%s) started, good luck!", version);
+
+        this.router = router;
+        this.server = server;
+    }
+
     public static File findWebAppDir() {
         findAnchorClass();
 

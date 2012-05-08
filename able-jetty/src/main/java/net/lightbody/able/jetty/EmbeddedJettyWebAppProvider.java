@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.name.Named;
 import com.google.inject.servlet.GuiceFilter;
-import net.lightbody.able.core.util.Able;
+import net.lightbody.able.core.Able;
 import net.lightbody.able.core.util.Log;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
