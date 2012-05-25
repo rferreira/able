@@ -1,8 +1,8 @@
 package net.lightbody.able.core.middleware;
 
-import com.google.inject.Singleton;
-import net.lightbody.able.core.Request;
-import net.lightbody.able.core.Response;
+import net.lightbody.able.core.http.Request;
+import net.lightbody.able.core.http.Response;
+import net.lightbody.able.core.http.XHeaders;
 
 /**
  * Created with IntelliJ IDEA.
@@ -23,6 +23,6 @@ public class XRuntimeMiddleware extends Middleware {
 
     @Override
     public void process(Response resp) {
-        resp.HEADERS.put("X-RUNTIME", String.valueOf(System.currentTimeMillis() - start));
+        resp.HEADERS.put(XHeaders.X_RUNTIME, String.valueOf(System.currentTimeMillis() - start));
     }
 }

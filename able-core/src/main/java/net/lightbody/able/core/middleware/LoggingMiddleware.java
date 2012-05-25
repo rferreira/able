@@ -1,7 +1,7 @@
 package net.lightbody.able.core.middleware;
 
-import net.lightbody.able.core.Request;
-import net.lightbody.able.core.Response;
+import net.lightbody.able.core.http.Request;
+import net.lightbody.able.core.http.Response;
 import net.lightbody.able.core.util.Log;
 
 /**
@@ -16,11 +16,11 @@ public class LoggingMiddleware extends Middleware {
 
     @Override
     public void process(Request req) {
-        LOG.info(req.toString());
+        System.out.println(req.toString());
     }
 
     @Override
     public void process(Response resp) {
-        LOG.info(resp.toString());
+        System.out.println(resp.toString());
     }
 }

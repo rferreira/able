@@ -2,10 +2,9 @@ package net.lightbody.able.core.views;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import net.lightbody.able.core.Request;
-import net.lightbody.able.core.Response;
-import net.lightbody.able.core.ResponseNotFound;
-import net.lightbody.able.core.View;
+import net.lightbody.able.core.http.Request;
+import net.lightbody.able.core.http.Response;
+import net.lightbody.able.core.http.ResponseNotFound;
 import net.lightbody.able.core.http.HttpMethod;
 import net.lightbody.able.core.http.XHeaders;
 import net.lightbody.able.core.util.Log;

@@ -15,7 +15,7 @@ import org.jboss.netty.handler.codec.http.HttpResponseEncoder;
 public class HttpPipelineFactory implements ChannelPipelineFactory {
 
     @Inject
-    private NettyHandler handler;
+    private Handler handler;
     @Inject
     private XSendFileHandler xsendfile;
 

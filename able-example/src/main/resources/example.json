@@ -3,6 +3,7 @@
     "static_root" : "/Users/rafael/dev/scanii/static/",
     "static_url" : "/static/",
     "debug"  : true,
+    "able.debug" : true,
     "config" : {
         "refresh" : 5
     },
@@ -26,9 +27,6 @@
         "mongo" : {
             "uri" : "mongodb://localhost/able_example"
         }
-    },
-    "middleware" : [        
-        "net.lightbody.able.core.middleware.XRuntimeMiddleware"
-    ]
+    }
 }
 

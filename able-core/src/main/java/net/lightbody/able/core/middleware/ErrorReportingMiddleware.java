@@ -1,7 +1,6 @@
 package net.lightbody.able.core.middleware;
 
-import net.lightbody.able.core.Request;
-import net.lightbody.able.core.Response;
+import net.lightbody.able.core.http.Response;
 
 /**
  * Created with IntelliJ IDEA.

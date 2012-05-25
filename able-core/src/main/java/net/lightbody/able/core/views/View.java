@@ -1,4 +1,7 @@
-package net.lightbody.able.core;
+package net.lightbody.able.core.views;
+
+import net.lightbody.able.core.http.Request;
+import net.lightbody.able.core.http.Response;
 
 /**
  * Created with IntelliJ IDEA.

@@ -1,13 +1,12 @@
 package net.lightbody.able.core.routing;
 
-import jregex.Pattern;
 
 /**
  * Date: Apr 28, 2012
  * Time: 2:15:57 PM
  */
 public class Route {
-    private Pattern pattern;
+    private NamedPattern pattern;
     private Class clazz;
     private String regex;
 
@@ -18,16 +17,16 @@ public class Route {
 
 
     public Route(String regex, Class clazz) {
-        this.pattern = new Pattern(regex);
+        this.pattern = NamedPattern.compile(regex);
         this.regex = regex;
         this.clazz = clazz;
     }
 
-    public Pattern getPattern() {
+    public NamedPattern getPattern() {
         return pattern;
     }
 
-    public void setPattern(Pattern pattern) {
+    public void setPattern(NamedPattern pattern) {
         this.pattern = pattern;
     }
 

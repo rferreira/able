@@ -5,13 +5,12 @@ import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Singleton;
-import jregex.Matcher;
-import net.lightbody.able.core.Request;
-import net.lightbody.able.core.Response;
-import net.lightbody.able.core.View;
+import net.lightbody.able.core.http.Request;
+import net.lightbody.able.core.http.Response;
+import net.lightbody.able.core.views.Default;
+import net.lightbody.able.core.views.View;
 import net.lightbody.able.core.middleware.Middleware;
 import net.lightbody.able.core.util.Log;
-import net.lightbody.able.core.views.DefaultView;
 
 import java.io.IOException;
 import java.util.List;
@@ -25,28 +24,37 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @Singleton
 public class Router {
 
-    private List<Route> routes = new CopyOnWriteArrayList<Route>();
-    public List<Class> middlewares = new CopyOnWriteArrayList<Class>();
+    public List<Route> routes = new CopyOnWriteArrayList<Route>();
+    public List<Class> middleware = new CopyOnWriteArrayList<Class>();
 
     @Inject
     Injector injector;
 
-    @Inject
-    DefaultView defaultView;
-
     private static Log LOG = new Log();
 
-    public void route(String regex, Class clazz) {
+    public Route route(String regex, Class clazz) {
+        Route r = new Route(regex, clazz);
         routes.add(
-                new Route(regex, clazz)
+                r
         );
+
+        return r;
     }
 
     private View resolve(Request request) {
-        Matcher m;
+        NamedMatcher m;
+        NamedPattern p;
         for (Route route : routes) {
-            m = route.getPattern().matcher(request.getPath());
+            p = route.getPattern();
+            m = p.matcher(request.getPath());
             if (m.matches()) {
+
+                // parsing groups:
+                if (m.groupCount() > 0) {
+                    request.VARS.putAll(m.namedGroups());
+                    LOG.fine(request.toString());
+                }
+
                 return (View) injector.getInstance(route.getClazz());
             }
         }
@@ -74,11 +82,11 @@ public class Router {
             res = view.dispatch(req);
         } else {
             LOG.fine("could not find a proper view to render this request - returning 404");
-            res = defaultView.dispatch(req);
+            res = injector.getInstance(Default.class).dispatch(req);
 
         }
 
-       // post middleware processing 
+        // post middleware processing
         for (Middleware m : middlewares) {
             m.process(res);
         }
@@ -106,11 +114,11 @@ public class Router {
 
     private List<Middleware> getMiddlewareClasses() {
         List<Middleware> r = Lists.newArrayList();
-        for (Class z : middlewares) {
+        for (Class z : middleware) {
             try {
                 r.add((Middleware) injector.getInstance(z));
             } catch (Exception e) {
-                new RuntimeException(e);
+                LOG.severe("error", e);
             }
         }
         return r;

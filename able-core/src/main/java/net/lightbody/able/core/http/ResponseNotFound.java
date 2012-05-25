@@ -1,4 +1,4 @@
-package net.lightbody.able.core;
+package net.lightbody.able.core.http;
 
 /**
  * Date: Apr 29, 2012

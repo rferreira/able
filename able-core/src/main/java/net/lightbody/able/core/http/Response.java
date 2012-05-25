@@ -1,4 +1,4 @@
-package net.lightbody.able.core;
+package net.lightbody.able.core.http;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
@@ -7,7 +7,9 @@ import net.lightbody.able.core.util.Log;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,16 +21,43 @@ import java.util.Map;
 public class Response {
     private static Log LOG = new Log();
 
-    private ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-
+    public static String DEFAULT_CONTENT_TYPE = "text/html; charset=utf-8";
     public int status = 200;
-    public final Map<String, String> HEADERS = Maps.newHashMap();
 
+    private ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+    public final Map<String, String> HEADERS = Maps.newConcurrentMap();
+    private final List<Cookie> cookies = new CopyOnWriteArrayList<Cookie>();
 
-    public void setCookie(String key, String value) {
+    public void setCookie(String name, String value) {
+        this.setCookie(name, value, 0, "/", null, false, true );
+    }
+
+    public void setCookie(String name, String value, int maxAge, String path, String domain, boolean isSecure, boolean isHttpOnly) {
         Preconditions.checkNotNull(value);
-        Preconditions.checkNotNull(key);
-        throw new IllegalStateException("not implemented!");
+        Preconditions.checkNotNull(name);
+        Cookie c = new Cookie(name, value);
+
+        if (maxAge != 0 ) {
+            c.setMaxAge(maxAge);
+        }
+
+        if (path != null) {
+            c.setPath(path);
+        }
+
+        if (domain != null) {
+            c.setDomain(domain);
+        }
+
+        c.setSecure(isSecure);
+        c.setHttpOnly(isHttpOnly);
+
+        cookies.add(c);
+
+    }
+
+    public List<Cookie> getCookies() {
+        return cookies;
     }
 
     public void setContent(byte[] content) {
@@ -55,10 +84,10 @@ public class Response {
 
     public Response() {
         status = 200;
-        HEADERS.put(HttpHeaders.CONTENT_TYPE, "text/html");
+        HEADERS.put(HttpHeaders.CONTENT_TYPE, DEFAULT_CONTENT_TYPE);
     }
 
-    public ByteArrayOutputStream flush() throws IOException {
+    public synchronized ByteArrayOutputStream flush() throws IOException {
         buffer.flush();
 
         HEADERS.put(HttpHeaders.CONTENT_LENGTH, String.valueOf(buffer.size()));
@@ -69,7 +98,7 @@ public class Response {
     @Override
     public String toString() {
         return "Response{" +
-                ", status=" + status +
+                "status=" + status +
                 ", HEADERS=" + HEADERS +
                 '}';
     }

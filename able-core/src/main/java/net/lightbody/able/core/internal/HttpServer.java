@@ -1,8 +1,7 @@
-package net.lightbody.able.core;
+package net.lightbody.able.core.internal;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import net.lightbody.able.core.internal.HttpPipelineFactory;
 import net.lightbody.able.core.util.Log;
 import org.jboss.netty.bootstrap.ServerBootstrap;
 import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;

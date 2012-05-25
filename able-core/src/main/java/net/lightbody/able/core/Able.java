@@ -1,12 +1,19 @@
 package net.lightbody.able.core;
 
+import com.google.common.io.Resources;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.google.inject.name.Named;
+import net.lightbody.able.core.internal.HttpServer;
 import net.lightbody.able.core.routing.Router;
+import net.lightbody.able.core.templates.Manager;
+import net.lightbody.able.core.templates.Templates;
 import net.lightbody.able.core.util.Log;
 
 import java.io.File;
 import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Singleton
 public class Able {
@@ -17,15 +24,35 @@ public class Able {
     public Router router;
     public HttpServer server;
 
+    public Manager templateManager;
+
     private static Log LOG = new Log();
 
     @Inject
-    public Able(Router router, HttpServer server) {
-
-        LOG.info("able framework (v%s) started, good luck!", version);
+    public Able(Router router, HttpServer server, Manager tpm, @Named("able.debug") boolean isDebug) {
 
         this.router = router;
         this.server = server;
+        this.templateManager = tpm;
+
+        /// are we running in debug mode:
+        if (isDebug) {
+            Logger logger = Logger.getLogger("net.lightbody.able");
+            logger.setLevel(Level.FINE);
+            LOG.fine("framework in debug mode!");
+        }
+
+        LOG.fine("wiring the templates shortcut");
+        Templates.setManager(tpm);
+
+        URL templatesDIR = Resources.getResource(getClass(), "/templates/");
+
+        LOG.info("loading templates from: " + templatesDIR.getPath());
+
+        tpm.load(new File(templatesDIR.getPath()));
+
+        LOG.info("able framework (v%s) started, good luck!", version);
+
     }
 
     public static File findWebAppDir() {
@@ -91,4 +118,5 @@ public class Able {
 
         return anchorClass;
     }
+
 }

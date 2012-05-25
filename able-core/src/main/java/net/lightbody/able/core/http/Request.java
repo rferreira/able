@@ -1,11 +1,9 @@
-package net.lightbody.able.core;
+package net.lightbody.able.core.http;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
 import com.google.common.io.ByteStreams;
 import com.google.common.net.HttpHeaders;
-import net.lightbody.able.core.http.HttpMethod;
-import net.lightbody.able.core.http.XHeaders;
 import net.lightbody.able.core.util.Log;
 
 import java.io.IOException;
@@ -19,7 +17,7 @@ import java.util.Map;
  * Time: 10:35 PM
  * To change this template use File | Settings | File Templates.
  */
-public class Request {
+public class  Request {
 
     private InputStream body;
     private HttpMethod method = null;
@@ -81,7 +79,7 @@ public class Request {
     @Override
     public String toString() {
         return "Request{" +
-                ", method='" + method + '\'' +
+                "method='" + method + '\'' +
                 ", version='" + version + '\'' +
                 ", path='" + path + '\'' +
                 ", GET=" + GET +
@@ -89,6 +87,7 @@ public class Request {
                 ", HEADERS=" + HEADERS +
                 ", SESSION=" + SESSION +
                 ", COOKIES=" + COOKIES +
+                ", VARS=" + VARS +
                 '}';
     }
 }
