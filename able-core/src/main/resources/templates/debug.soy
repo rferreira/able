@@ -1,0 +1,56 @@
+{namespace able.debug }
+
+/**
+ * Debug page
+ * @param error the error we saw
+ * @param errormsg the error mesage in more detail
+ * @param version the version
+ * @param routes routes to display
+ */
+{template .index}
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+   "http://www.w3.org/TR/html4/loose.dtd">
+
+<html lang="en">
+     <head>
+        <title>Aw snap!</title>
+        {call .css/}
+    </head>
+
+<body>
+<div class="debugger">
+    <h1>{$error}</h1>
+    <div class="detail">
+        <p class="errormsg">{$errormsg}</p>
+    </div>
+
+    <h2 class="traceback">Routes</h2>
+    <div class="traceback">
+        <ul>
+        {foreach $route in $routes}
+            <li><pre class="console"> {$route} </pre> </li>
+        {/foreach}
+        </ul>
+    </div>
+
+    <h2 class="traceback">Environment</h2>
+    <div class="traceback">
+    </div>
+    </div>
+
+    <h2 class="traceback">Config</h2>
+    <div class="traceback">
+
+    </div>
+    <div class="explanation">
+     You are seeing this page because debug mode is enabled
+    </div>
+
+    // footer:
+    <div class="footer">
+        Able version: {$version}
+    </div>
+</div>
+</body>
+</html>
+{/template}
