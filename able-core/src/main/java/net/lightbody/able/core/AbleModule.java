@@ -1,26 +1,25 @@
 package net.lightbody.able.core;
 
 import com.google.inject.AbstractModule;
-import com.google.template.soy.SoyModule;
 import net.lightbody.able.core.config.ConfigurationModule;
 
 /**
- * Date: 5/24/12
- * Time: 8:12 PM
+ * Created with IntelliJ IDEA.
+ * User: raferrei
+ * Date: 5/26/12
+ * Time: 4:57 PM
+ * To change this template use File | Settings | File Templates.
  */
 public class AbleModule extends AbstractModule {
+    private String name;
 
-
-    private String val;
-
-    public AbleModule(String val) {
-        this.val = val;
+    public AbleModule(String name) {
+        this.name = name;
     }
 
     @Override
     protected void configure() {
-        // something cool will happen here.
-        install(new ConfigurationModule(val));
-        install(new SoyModule());
+        install(new ConfigurationModule(name));
+
     }
 }

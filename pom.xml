@@ -125,14 +125,9 @@
 
     <modules>
         <module>able-core</module>
-        <module>able-loggly</module>
-        <module>able-jetty</module>
         <module>able-mongo</module>
         <module>able-hibernate</module>
-        <module>able-stripes</module>
-        <module>able-freemarker</module>
         <module>able-soy</module>
-        <module>able-web</module>
         <module>able-example</module>
     </modules>
 

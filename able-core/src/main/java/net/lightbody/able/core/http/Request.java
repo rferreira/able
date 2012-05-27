@@ -30,7 +30,7 @@ public class  Request {
     public final Map<String, String> POST = Maps.newConcurrentMap();
     public final Map<String, String> HEADERS = Maps.newConcurrentMap();
 
-    public final Map<String,String> SESSION = Maps.newConcurrentMap();
+    public final Map<String, Object> SESSION = Maps.newConcurrentMap();
     public final Map<String, String> COOKIES = Maps.newConcurrentMap();
     public final Map<String, String> VARS = Maps.newConcurrentMap();
 
