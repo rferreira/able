@@ -78,7 +78,7 @@ public class  Request {
         
     @Override
     public String toString() {
-        return "Request{" +
+        return "Request: \n{" +
                 "method='" + method + '\'' +
                 ", version='" + version + '\'' +
                 ", path='" + path + '\'' +

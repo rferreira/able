@@ -97,9 +97,10 @@ public class Response {
 
     @Override
     public String toString() {
-        return "Response{" +
+        return "Response: \n{" +
                 "status=" + status +
                 ", HEADERS=" + HEADERS +
+                ", cookies=" + cookies +
                 '}';
     }
 }

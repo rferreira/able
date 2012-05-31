@@ -4,6 +4,8 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import net.lightbody.able.core.Able;
 import net.lightbody.able.core.AbleModule;
+import net.lightbody.able.core.middleware.LoggingMiddleware;
+import net.lightbody.able.core.middleware.SessionMiddleware;
 import net.lightbody.able.core.middleware.XRuntimeMiddleware;
 import net.lightbody.able.core.util.Log;
 import net.lightbody.able.core.views.ServeStatic;
@@ -23,7 +25,14 @@ public class Main {
 
         // wiring middleware
         able.router.middleware.add(XRuntimeMiddleware.class);
-        //able.router.middleware.add(LoggingMiddleware.class);
+
+        // enabling sessions:
+        able.router.middleware.add(SessionMiddleware.class);
+
+        // debug logging:
+        able.router.middleware.add(LoggingMiddleware.class);
+
+        // Routing:
 
         // sample route definition
         able.router.route("^/$", Homepage.class);

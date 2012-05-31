@@ -7,10 +7,10 @@ import com.google.inject.Injector;
 import com.google.inject.Singleton;
 import net.lightbody.able.core.http.Request;
 import net.lightbody.able.core.http.Response;
-import net.lightbody.able.core.views.Default;
-import net.lightbody.able.core.views.View;
 import net.lightbody.able.core.middleware.Middleware;
 import net.lightbody.able.core.util.Log;
+import net.lightbody.able.core.views.Default;
+import net.lightbody.able.core.views.View;
 
 import java.io.IOException;
 import java.util.List;
@@ -67,16 +67,16 @@ public class Router {
         Preconditions.checkNotNull(req);
         Response res;
 
+        LOG.fine("routing: " + req.getPath());
+
+        View view = resolve(req);
+
         // Handle middelware
         List<Middleware> middlewares = getMiddlewareClasses();
 
         for (Middleware m : middlewares) {
             m.process(req);
         }
-
-        LOG.fine("routing: " + req.getPath());
-
-        View view = resolve(req);
 
         if (view != null) {
             res = view.dispatch(req);
@@ -118,7 +118,8 @@ public class Router {
             try {
                 r.add((Middleware) injector.getInstance(z));
             } catch (Exception e) {
-                LOG.severe("error", e);
+                LOG.severe("error while instanciating middleware [%s]", z.toString(), e);
+                throw new RuntimeException(e);
             }
         }
         return r;
