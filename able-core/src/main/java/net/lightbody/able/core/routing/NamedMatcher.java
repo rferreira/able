@@ -107,9 +107,12 @@ public class NamedMatcher implements NamedMatchResult {
 		Map<String, String> result = new LinkedHashMap<String, String>();
 
 		for (int i = 1; i <= groupCount(); i++) {
-			String groupName = parentPattern.groupNames().get(i-1);
-			String groupValue = matcher.group(i);
-			result.put(groupName, groupValue);
+            String name = "group-" + i;
+            if (parentPattern.groupNames().size() > 0 )   {
+			    name = parentPattern.groupNames().get(i-1);
+            }
+            String groupValue = matcher.group(i);
+			result.put(name, groupValue);
 		}
 
 		return result;

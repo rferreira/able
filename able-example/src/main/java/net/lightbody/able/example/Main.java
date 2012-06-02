@@ -27,7 +27,7 @@ public class Main {
         able.router.middleware.add(XRuntimeMiddleware.class);
 
         // enabling sessions:
-        able.router.middleware.add(SessionMiddleware.class);
+        //able.router.middleware.add(SessionMiddleware.class);
 
         // debug logging:
         able.router.middleware.add(LoggingMiddleware.class);
@@ -41,10 +41,10 @@ public class Main {
         able.router.route("^/static/(.*)$", ServeStatic.class);
 
         // with groups
-        able.router.route("^/hello/(.*)/world/(.*)/$", Homepage.class);
+        able.router.route("^/hello/(.*)/$", Homepage.class);
 
         // with named groups
-        able.router.route("^/hello/(?<person>.*)/$", Homepage.class);
+        able.router.route("^/hello/group/(?<person>.*)/$", Homepage.class);
 
         // API sample
         able.router.route("^/api/(?<model>.*)/$", API.class);

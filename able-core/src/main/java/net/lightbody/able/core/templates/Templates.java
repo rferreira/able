@@ -6,6 +6,7 @@ import net.lightbody.able.core.http.Response;
 import java.util.Map;
 
 /**
+ * Static helper class for dealing with the template rendering engine
  * Date: 5/24/12
  * Time: 8:25 PM
  */

@@ -58,6 +58,7 @@ public class Default implements View {
                 "env", System.getenv()
 
         );
+
         return Templates.render("able.debug.index", context);
 
     }

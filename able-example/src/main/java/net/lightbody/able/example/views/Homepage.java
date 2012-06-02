@@ -11,9 +11,12 @@ import java.util.Map;
  * Date: Apr 28, 2012
  * Time: 2:29:28 PM
  */
+
 public class Homepage implements View {
     @Override
     public Response dispatch(Request req) {
+
+        System.out.println(req.GET.get("format"));
 
         StringBuilder sb = new StringBuilder();
         sb.append("<h1>Test Homepage</h1>");

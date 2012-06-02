@@ -1,6 +1,6 @@
 {
     "port" : 8080,
-    "static_root" : "/Users/rafael/dev/scanii/static/",
+    "static_root" : "/Users/rafael/dev/static/",
     "static_url" : "/static/",
     "debug"  : true,
     "secret" : "super secret key that must be unique to each application",

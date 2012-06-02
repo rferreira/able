@@ -12,6 +12,7 @@ import org.jboss.netty.channel.*;
 import org.jboss.netty.handler.codec.http.*;
 import org.jboss.netty.handler.codec.http.Cookie;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -37,7 +38,7 @@ public class Handler extends SimpleChannelHandler {
 
         Request req = new Request(
                 net.lightbody.able.core.http.HttpMethod.valueOf(internalReq.getMethod().toString()),
-                internalReq.getUri(),
+                new URI(internalReq.getUri()).getPath(),
                 new ChannelBufferInputStream(internalReq.getContent())
         );
 

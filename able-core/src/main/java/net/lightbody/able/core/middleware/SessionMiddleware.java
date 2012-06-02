@@ -1,20 +1,16 @@
 package net.lightbody.able.core.middleware;
 
 import com.google.common.base.Charsets;
-import com.google.gson.Gson;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import net.lightbody.able.core.http.Request;
 import net.lightbody.able.core.http.Response;
 import net.lightbody.able.core.util.Log;
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
+import org.apache.commons.codec.binary.Base64;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -32,21 +28,22 @@ public class SessionMiddleware extends Middleware {
 
     private static Log LOG = new Log();
 
-    private BASE64Decoder decoder = new BASE64Decoder();
-    private BASE64Encoder encoder = new BASE64Encoder();
+    private static final Base64 base64 = new Base64(true);
+
+    private boolean compressionEnabled = false;
 
     private SecretKeySpec key;
 
     // where we store the inflight request:
     private Request inflightRequest;
-    private Gson gson = new Gson();
-
     private String original;
+
 
     @Inject
     public SessionMiddleware(@Named("secret") String secret) {
         key = new SecretKeySpec(secret.getBytes(Charsets.UTF_8), "HmacSHA1");
         LOG.fine("session logic started...");
+
     }
 
     @Override
@@ -81,7 +78,8 @@ public class SessionMiddleware extends Middleware {
             req.SESSION.putAll(sessionData);
 
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            LOG.info("invalid session data from cookie - ignoring", e);
+            original = null; // forcing a reload
         }
     }
 
@@ -110,12 +108,20 @@ public class SessionMiddleware extends Middleware {
             Mac m = Mac.getInstance(key.getAlgorithm());
             m.init(key);
             byte[] signedData = m.doFinal(data);
-            return encoder.encode(signedData);
+            return base64.encodeToString(signedData);
 
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
+    }
+
+    public boolean isCompressionEnabled() {
+        return compressionEnabled;
+    }
+
+    public void setCompressionEnabled(boolean compressionEnabled) {
+        this.compressionEnabled = compressionEnabled;
     }
 
     public class InvalidSessionSignatureException extends RuntimeException {
@@ -124,21 +130,52 @@ public class SessionMiddleware extends Middleware {
         }
     }
 
-    private String safeEncode(Object o) throws IOException {
+    public String safeEncode(Object o) throws IOException {
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-        ObjectOutput out = new ObjectOutputStream(new GZIPOutputStream(buffer));
+
+        ObjectOutput out;
+
+        if (compressionEnabled) {
+            out = new ObjectOutputStream(new GZIPOutputStream(buffer));
+        } else {
+            out = new ObjectOutputStream(buffer);
+
+        }
         out.writeObject(o);
         out.close();
-        return URLEncoder.encode(encoder.encode(buffer.toByteArray()), Charsets.UTF_8.toString());
+        return base64.encodeToString(buffer.toByteArray());
     }
 
-    private Object safeDecode(String s) throws IOException, ClassNotFoundException {
-        String payload = new String(decoder.decodeBuffer(URLDecoder.decode(s, Charsets.UTF_8.toString())), Charsets.UTF_8);
-        ByteArrayInputStream buffer = new ByteArrayInputStream(payload.getBytes());
-        ObjectInputStream out = new ObjectInputStream(new GZIPInputStream(buffer));
-        Object o = out.readObject();
-        out.close();
+    public Object safeDecode(String s) throws IOException, ClassNotFoundException {
+
+        ByteArrayInputStream buffer = new ByteArrayInputStream(base64.decode(s));
+
+        ObjectInputStream in;
+
+        if (compressionEnabled) {
+            in = new ObjectInputStream(new GZIPInputStream(buffer));
+        } else {
+            in = new ObjectInputStream(buffer);
+        }
+
+        Object o = in.readObject();
+        in.close();
         return o;
+    }
+
+    public static void main(String[] args) {
+        SessionMiddleware m = new SessionMiddleware("12345");
+        try {
+            String encoded = (String) m.safeEncode("helloworld");
+            assert ("helloworld".equals(m.safeDecode(encoded)));
+
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+
+        System.out.println("worked!");
     }
 
 }
