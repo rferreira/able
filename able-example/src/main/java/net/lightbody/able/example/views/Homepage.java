@@ -40,9 +40,9 @@ public class Homepage implements View {
         }
 
         Response r = new Response(200, sb.toString(), "text/html");
-        r.setCookie("foo", "bar", 100, "/", "localhost", false, false);
+        r.setCookie("foo", "bar", 100, "/", null, false, false);
 
-        r.setCookie("batman", "robin", 0, "/", "localhost", false, false);
+        r.setCookie("batman", "robin", 0, "/", null, false, false);
         r.setCookie("green", "lantern");
 
 

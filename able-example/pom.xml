@@ -111,16 +111,7 @@
             <artifactId>able-core</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>net.lightbody.able</groupId>
-            <artifactId>able-loggly</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>net.lightbody.able</groupId>
-            <artifactId>able-jetty</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+
         <dependency>
             <groupId>net.lightbody.able</groupId>
             <artifactId>able-mongo</artifactId>
@@ -131,26 +122,13 @@
             <artifactId>able-hibernate</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>net.lightbody.able</groupId>
-            <artifactId>able-stripes</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>net.lightbody.able</groupId>
-            <artifactId>able-freemarker</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+
         <dependency>
             <groupId>net.lightbody.able</groupId>
             <artifactId>able-soy</artifactId>
             <version>${project.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.google.sitebricks</groupId>
-            <artifactId>sitebricks</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>mysql</groupId>

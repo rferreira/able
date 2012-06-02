@@ -25,8 +25,8 @@ public class Response {
     public int status = 200;
 
     private ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-    public final Map<String, String> HEADERS = Maps.newConcurrentMap();
     private final List<Cookie> cookies = new CopyOnWriteArrayList<Cookie>();
+    public final Map<String, String> HEADERS = Maps.newConcurrentMap();
 
     public void setCookie(String name, String value) {
         this.setCookie(name, value, 0, "/", null, false, true );
