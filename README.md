@@ -1,15 +1,15 @@
-Play like routes, django like middelware, plumbing by netty and completely servlet free :)
+# Play like routes, django like middelware, plumbing by netty and completely servlet free :)
 
-# to run:
+## Running it
 
 * download google-closures templates from https://github.com/lightbody/closure-templates and "mvn install" it
 * edit able-example and run Main
 
-## Using;
+## Using
 
 Get yorself a copy of "Able.class" and start settings up routes and, ultimately, running .server.start()
 
-## Routing:
+## Routing
 
 ### Routes are simple regex like this:
 
