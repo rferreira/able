@@ -2,6 +2,7 @@ package net.lightbody.able.core.views;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
@@ -14,6 +15,7 @@ import net.lightbody.able.core.routing.Router;
 import net.lightbody.able.core.templates.Templates;
 import net.lightbody.able.core.util.Log;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -55,7 +57,7 @@ public class Default implements View {
                 "errormsg", "we could not find a view for path: " + req.getPath(),
                 "version" , Able.version,
                 "routes", routeInfo,
-                "env", System.getenv()
+                "environment", System.getenv()
 
         );
 

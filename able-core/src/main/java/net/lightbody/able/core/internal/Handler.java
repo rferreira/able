@@ -12,6 +12,7 @@ import org.jboss.netty.channel.*;
 import org.jboss.netty.handler.codec.http.*;
 import org.jboss.netty.handler.codec.http.Cookie;
 
+import javax.inject.Named;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,10 @@ public class Handler extends SimpleChannelHandler {
 
     @Inject
     Router router;
+
+    @Inject
+    @Named("debug") boolean debug;
+
 
     @Override
     public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {

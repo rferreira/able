@@ -29,7 +29,7 @@ public class Able {
     private static Log LOG = new Log();
 
     @Inject
-    public Able(Router router, HttpServer server, Manager tpm, @Named("able.debug") boolean isDebug) {
+    public Able(Router router, HttpServer server, @Named("debug") boolean debug, Manager tpm, @Named("able.debug") boolean isDebug) {
 
         this.router = router;
         this.server = server;
@@ -45,11 +45,21 @@ public class Able {
         LOG.fine("wiring the templates shortcut");
         Templates.setManager(tpm);
 
+        // loading default templates
         URL templatesDIR = Resources.getResource(getClass(), "/templates/");
 
         LOG.info("loading templates from: " + templatesDIR.getPath());
 
-        tpm.load(new File(templatesDIR.getPath()));
+        if (debug) {
+            tpm.load(new File(templatesDIR.getPath().replace("target/classes","src/main/resources")));
+        } else {
+            tpm.load(new File(templatesDIR.getPath()));
+        }
+
+        // loading application templates:
+        tpm.load( findWebAppDir());
+        // compiling
+        tpm.compile();
 
         LOG.info("able framework (v%s) started, good luck!", version);
 

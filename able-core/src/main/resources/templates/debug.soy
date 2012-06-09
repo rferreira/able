@@ -6,6 +6,7 @@
  * @param errormsg the error mesage in more detail
  * @param version the version
  * @param routes routes to display
+ * @param environment environemnt to display
  */
 {template .index}
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
@@ -35,13 +36,14 @@
 
     <h2 class="traceback">Environment</h2>
     <div class="traceback">
+            <ul>
+            {foreach $e in keys($environment)}
+                <li><pre class="console"> {$e} : {$environment[$e]} </pre>  </li>
+            {/foreach}
+            </ul>
     </div>
     </div>
 
-    <h2 class="traceback">Config</h2>
-    <div class="traceback">
-
-    </div>
     <div class="explanation">
      You are seeing this page because debug mode is enabled
     </div>
