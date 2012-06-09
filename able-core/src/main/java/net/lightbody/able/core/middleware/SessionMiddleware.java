@@ -18,7 +18,6 @@ import java.util.zip.GZIPOutputStream;
 /**
  * Session store backed by a signed cookie
  * TODO: figure out a way to generate keys in the config file
- * TODO: Add compression gzip of data so we don't hit against the max cookie size limit.
  * TODO: expire at browser closing support
  */
 public class SessionMiddleware extends Middleware {
@@ -27,8 +26,6 @@ public class SessionMiddleware extends Middleware {
     public static final int SESSION_DEFAULT_AGE = 1209600;     // two weeks
 
     private static Log LOG = new Log();
-
-    private static final Base64 base64 = new Base64(true);
 
     private boolean compressionEnabled = false;
 
@@ -40,9 +37,9 @@ public class SessionMiddleware extends Middleware {
 
 
     @Inject
-    public SessionMiddleware(@Named("secret") String secret) {
+    public SessionMiddleware(@Named("session.secret") String secret, @Named("session.compression") boolean compress) {
         key = new SecretKeySpec(secret.getBytes(Charsets.UTF_8), "HmacSHA1");
-        LOG.fine("session logic started...");
+        this.compressionEnabled = compress;
 
     }
 
@@ -108,7 +105,7 @@ public class SessionMiddleware extends Middleware {
             Mac m = Mac.getInstance(key.getAlgorithm());
             m.init(key);
             byte[] signedData = m.doFinal(data);
-            return base64.encodeToString(signedData);
+            return Base64.encodeBase64URLSafeString(signedData);
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -143,12 +140,12 @@ public class SessionMiddleware extends Middleware {
         }
         out.writeObject(o);
         out.close();
-        return base64.encodeToString(buffer.toByteArray());
+        return Base64.encodeBase64URLSafeString(buffer.toByteArray());
     }
 
     public Object safeDecode(String s) throws IOException, ClassNotFoundException {
 
-        ByteArrayInputStream buffer = new ByteArrayInputStream(base64.decode(s));
+        ByteArrayInputStream buffer = new ByteArrayInputStream(Base64.decodeBase64(s));
 
         ObjectInputStream in;
 
@@ -161,21 +158,6 @@ public class SessionMiddleware extends Middleware {
         Object o = in.readObject();
         in.close();
         return o;
-    }
-
-    public static void main(String[] args) {
-        SessionMiddleware m = new SessionMiddleware("12345");
-        try {
-            String encoded = (String) m.safeEncode("helloworld");
-            assert ("helloworld".equals(m.safeDecode(encoded)));
-
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-
-        System.out.println("worked!");
     }
 
 }

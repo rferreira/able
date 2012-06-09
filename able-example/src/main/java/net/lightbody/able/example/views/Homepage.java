@@ -31,8 +31,8 @@ public class Homepage implements View {
         req.SESSION.put("hello", "world");
 
 
-        // storing arbitraty junk:
-        req.SESSION.put("date", new Date());
+        // storing arbitraty junk forcing session to be flushed
+        //req.SESSION.put("date", new Date());
 
         req.SESSION.remove("cookie");
 

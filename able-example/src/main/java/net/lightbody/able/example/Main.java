@@ -27,10 +27,10 @@ public class Main {
         able.router.middleware.add(XRuntimeMiddleware.class);
 
         // enabling sessions:
-        //able.router.middleware.add(SessionMiddleware.class);
+        able.router.middleware.add(SessionMiddleware.class);
 
         // debug logging:
-        able.router.middleware.add(LoggingMiddleware.class);
+        //able.router.middleware.add(LoggingMiddleware.class);
 
         // Routing:
 
