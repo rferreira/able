@@ -2,11 +2,8 @@ package net.lightbody.able.core.views;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import net.lightbody.able.core.http.Request;
-import net.lightbody.able.core.http.Response;
-import net.lightbody.able.core.http.ResponseNotFound;
-import net.lightbody.able.core.http.HttpMethod;
-import net.lightbody.able.core.http.XHeaders;
+import net.lightbody.able.core.http.*;
+import net.lightbody.able.core.http.Methods;
 import net.lightbody.able.core.util.Log;
 
 import java.io.File;
@@ -36,7 +33,7 @@ public class ServeStatic implements View {
     @Override
     public Response dispatch(Request req) {
 
-        if (req.getMethod() != HttpMethod.GET) {
+        if (req.getMethod() != Methods.GET) {
             return new Response(405, "method not allowed", "text/html");
         }
 

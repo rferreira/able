@@ -20,7 +20,7 @@ import java.util.Map;
 public class  Request {
 
     private InputStream body;
-    private HttpMethod method = null;
+    private Methods method = null;
     private String version = "1.1";
     private String path;
 
@@ -38,7 +38,7 @@ public class  Request {
         return version;
     }
 
-    public Request(HttpMethod method, String path, InputStream body) {
+    public Request(Methods method, String path, InputStream body) {
         this.method = method;
         this.path = path;
         this.body = body;
@@ -55,7 +55,7 @@ public class  Request {
 
     }
 
-    public HttpMethod getMethod() {
+    public Methods getMethod() {
         return method;
     }
 

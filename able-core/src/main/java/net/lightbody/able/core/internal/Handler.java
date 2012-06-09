@@ -37,7 +37,7 @@ public class Handler extends SimpleChannelHandler {
         }
 
         Request req = new Request(
-                net.lightbody.able.core.http.HttpMethod.valueOf(internalReq.getMethod().toString()),
+                Methods.valueOf(internalReq.getMethod().toString()),
                 new URI(internalReq.getUri()).getPath(),
                 new ChannelBufferInputStream(internalReq.getContent())
         );
@@ -50,7 +50,7 @@ public class Handler extends SimpleChannelHandler {
 
         Map<String, List<String>> params = null;
 
-        if (req.getMethod() == net.lightbody.able.core.http.HttpMethod.GET) {
+        if (req.getMethod() == Methods.GET) {
             params = new QueryStringDecoder(req.getPath()).getParameters();
 
             // i'm really not sure why these are lists.
@@ -58,7 +58,7 @@ public class Handler extends SimpleChannelHandler {
                 req.GET.put(entry.getKey(), entry.getValue().get(0));
 
             }
-        } else if (req.getMethod() == net.lightbody.able.core.http.HttpMethod.POST) {
+        } else if (req.getMethod() == Methods.POST) {
             params = new QueryStringDecoder("?" + internalReq.getContent().toString(UTF_8)).getParameters();
 
             // i'm really not sure why these are lists.

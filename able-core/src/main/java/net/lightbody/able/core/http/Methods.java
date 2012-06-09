@@ -24,61 +24,61 @@ import java.util.Map;
  * <a href="http://en.wikipedia.org/wiki/Internet_Content_Adaptation_Protocol">ICAP</a>.
  * @apiviz.exclude
  */
-public class HttpMethod implements Comparable<HttpMethod> {
+public class Methods implements Comparable<Methods> {
     /**
      * The OPTIONS method represents a request for information about the communication options available on the request/response
      * chain identified by the Request-URI. This method allows the client to determine the options and/or requirements
      * associated with a resource, or the capabilities of a server, without implying a resource action or initiating a
      * resource retrieval.
      */
-    public static final HttpMethod OPTIONS = new HttpMethod("OPTIONS");
+    public static final Methods OPTIONS = new Methods("OPTIONS");
 
     /**
      * The GET method means retrieve whatever information (in the form of an entity) is identified by the Request-URI.
      * If the Request-URI refers to a data-producing process, it is the produced data which shall be returned as the entity
      * in the response and not the source text of the process, unless that text happens to be the output of the process.
      */
-    public static final HttpMethod GET = new HttpMethod("GET");
+    public static final Methods GET = new Methods("GET");
 
     /**
      * The HEAD method is identical to GET except that the server MUST NOT return a message-body in the response.
      */
-    public static final HttpMethod HEAD = new HttpMethod("HEAD");
+    public static final Methods HEAD = new Methods("HEAD");
 
     /**
      * The POST method is used to request that the origin server accept the entity enclosed in the request as a new
      * subordinate of the resource identified by the Request-URI in the Request-Line.
      */
-    public static final HttpMethod POST = new HttpMethod("POST");
+    public static final Methods POST = new Methods("POST");
 
     /**
      * The PUT method requests that the enclosed entity be stored under the supplied Request-URI.
      */
-    public static final HttpMethod PUT = new HttpMethod("PUT");
+    public static final Methods PUT = new Methods("PUT");
 
     /**
      * The PATCH method requests that a set of changes described in the
      * request entity be applied to the resource identified by the Request-URI.
      */
-    public static final HttpMethod PATCH = new HttpMethod("PATCH");
+    public static final Methods PATCH = new Methods("PATCH");
 
     /**
      * The DELETE method requests that the origin server delete the resource identified by the Request-URI.
      */
-    public static final HttpMethod DELETE = new HttpMethod("DELETE");
+    public static final Methods DELETE = new Methods("DELETE");
 
     /**
      * The TRACE method is used to invoke a remote, application-layer loop- back of the request message.
      */
-    public static final HttpMethod TRACE = new HttpMethod("TRACE");
+    public static final Methods TRACE = new Methods("TRACE");
 
     /**
      * This specification reserves the method name CONNECT for use with a proxy that can dynamically switch to being a tunnel
      */
-    public static final HttpMethod CONNECT = new HttpMethod("CONNECT");
+    public static final Methods CONNECT = new Methods("CONNECT");
 
-    private static final Map<String, HttpMethod> methodMap =
-            new HashMap<String, HttpMethod>();
+    private static final Map<String, Methods> methodMap =
+            new HashMap<String, Methods>();
 
     static {
         methodMap.put(OPTIONS.toString(), OPTIONS);
@@ -93,11 +93,11 @@ public class HttpMethod implements Comparable<HttpMethod> {
     }
 
     /**
-     * Returns the {@link HttpMethod} represented by the specified name.
+     * Returns the {@link Methods} represented by the specified name.
      * If the specified name is a standard HTTP method name, a cached instance
      * will be returned.  Otherwise, a new instance will be returned.
      */
-    public static HttpMethod valueOf(String name) {
+    public static Methods valueOf(String name) {
         if (name == null) {
             throw new NullPointerException("name");
         }
@@ -107,11 +107,11 @@ public class HttpMethod implements Comparable<HttpMethod> {
             throw new IllegalArgumentException("empty name");
         }
 
-        HttpMethod result = methodMap.get(name);
+        Methods result = methodMap.get(name);
         if (result != null) {
             return result;
         } else {
-            return new HttpMethod(name);
+            return new Methods(name);
         }
     }
 
@@ -124,7 +124,7 @@ public class HttpMethod implements Comparable<HttpMethod> {
      * <a href="http://en.wikipedia.org/wiki/Real_Time_Streaming_Protocol">RTSP</a> and
      * <a href="http://en.wikipedia.org/wiki/Internet_Content_Adaptation_Protocol">ICAP</a>
      */
-    public HttpMethod(String name) {
+    public Methods(String name) {
         if (name == null) {
             throw new NullPointerException("name");
         }
@@ -158,11 +158,11 @@ public class HttpMethod implements Comparable<HttpMethod> {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof HttpMethod)) {
+        if (!(o instanceof Methods)) {
             return false;
         }
 
-        HttpMethod that = (HttpMethod) o;
+        Methods that = (Methods) o;
         return getName().equals(that.getName());
     }
 
@@ -171,7 +171,7 @@ public class HttpMethod implements Comparable<HttpMethod> {
         return getName();
     }
 
-    public int compareTo(HttpMethod o) {
+    public int compareTo(Methods o) {
         return getName().compareTo(o.getName());
     }
 }
